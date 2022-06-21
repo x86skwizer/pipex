@@ -14,6 +14,15 @@
 #include <stdio.h>
 #include "libft.h"
 
+char	**get_cmd_options(char *argv)
+{
+	char	**cmd_options;
+
+	if (argv)
+		cmd_options = ft_split(argv, ' ');
+	return (cmd_options);
+}
+
 char	*get_paths(char **envp)
 {
 	int		i;
@@ -70,16 +79,9 @@ int	main(int ac, char *av[], char **envp)
 
 	char	*path = get_paths(envp);
 	char	**str = arrage_paths(path);
-	// int		i = 0;
-	// while (str[i])
-	// {
-	// 	printf("%s\n", str[i]);
-	// 	i++;
-	// }
+	char	**cmd_options = get_cmd_options(av[1]);
+	char	*cmd = find_path(str, cmd_options[0]);
 	
-	char	*cmd = find_path(str, "ls");
-	printf("%s\n", cmd);
-	char	*options[3] = {"ls", "-la", NULL};
-	execve(cmd, options, envp);
+	execve(cmd, cmd_options, envp);
 	return (0);
 }
