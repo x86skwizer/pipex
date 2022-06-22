@@ -12,7 +12,10 @@
 
 #include <unistd.h>
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 #include "libft.h"
+#include "libftprintf.h"
 
 char	**get_cmd_options(char *argv)
 {
@@ -81,7 +84,9 @@ int	main(int ac, char *av[], char **envp)
 	char	**str = arrage_paths(path);
 	char	**cmd_options = get_cmd_options(av[1]);
 	char	*cmd = find_path(str, cmd_options[0]);
-	
-	execve(cmd, cmd_options, envp);
+	char	*options[3] = {"ls", "-la", NULL};
+	int exe_num = execve("/usr/ls", options, envp);
+	if (exe_num == -1)
+		ft_printf("error : %s\n", strerror(errno));
 	return (0);
 }
