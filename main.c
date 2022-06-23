@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/23 02:10:19 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/23 03:44:37 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <string.h>
+#include <fcntl.h>
 #include "libft.h"
 #include "libftprintf.h"
 
@@ -83,12 +84,14 @@ char	*find_path(char **path_env, char *cmd)
 int	main(int ac, char *av[], char **envp)
 {
 
-	if (ac > 1)
+	if (ac > 2)
 	{
 		char	*path = get_paths(envp);
 		char	**str = arrage_paths(path);
-		char	**cmd_options = get_cmd_options(av[1]);
+		char	**cmd_options = get_cmd_options(av[2]);
 		char	*cmd = find_path(str, cmd_options[0]);
+		int		fdf = open(av[1], O_RDONLY);
+		dup2(fdf, STDIN_FILENO);
 		int exe_num = execve(cmd, cmd_options, envp);
 		if (exe_num == -1)
 			ft_printf("error : %s\n", strerror(errno));
