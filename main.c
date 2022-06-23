@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/21 01:19:27 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/23 00:20:30 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "libft.h"
 #include "libftprintf.h"
 
+/* Function that separate the cmd in args and its options */
 char	**get_cmd_options(char *argv)
 {
 	char	**cmd_options;
@@ -26,6 +27,7 @@ char	**get_cmd_options(char *argv)
 	return (cmd_options);
 }
 
+/* Function that returns every path possible separated by ':' */
 char	*get_paths(char **envp)
 {
 	int		i;
@@ -45,6 +47,7 @@ char	*get_paths(char **envp)
 	return (paths);
 }
 
+/* Function that split the paths possible and add '/' at the end of every path */
 char	**arrage_paths(char *paths)
 {
 	char	**path_env;
@@ -60,6 +63,7 @@ char	**arrage_paths(char *paths)
 	return (path_env);
 }
 
+/* Function that find the right path for the cmd */
 char	*find_path(char **path_env, char *cmd)
 {
 	char	*path_cmd;
@@ -84,8 +88,7 @@ int	main(int ac, char *av[], char **envp)
 	char	**str = arrage_paths(path);
 	char	**cmd_options = get_cmd_options(av[1]);
 	char	*cmd = find_path(str, cmd_options[0]);
-	char	*options[3] = {"ls", "-la", NULL};
-	int exe_num = execve("/usr/ls", options, envp);
+	int exe_num = execve(cmd, cmd_options, envp);
 	if (exe_num == -1)
 		ft_printf("error : %s\n", strerror(errno));
 	return (0);
