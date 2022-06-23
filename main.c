@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/23 00:20:30 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/23 02:10:19 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ char	**get_cmd_options(char *argv)
 {
 	char	**cmd_options;
 
-	if (argv)
-		cmd_options = ft_split(argv, ' ');
+	cmd_options = ft_split(argv, ' ');
 	return (cmd_options);
 }
 
@@ -84,12 +83,17 @@ char	*find_path(char **path_env, char *cmd)
 int	main(int ac, char *av[], char **envp)
 {
 
-	char	*path = get_paths(envp);
-	char	**str = arrage_paths(path);
-	char	**cmd_options = get_cmd_options(av[1]);
-	char	*cmd = find_path(str, cmd_options[0]);
-	int exe_num = execve(cmd, cmd_options, envp);
-	if (exe_num == -1)
-		ft_printf("error : %s\n", strerror(errno));
+	if (ac > 1)
+	{
+		char	*path = get_paths(envp);
+		char	**str = arrage_paths(path);
+		char	**cmd_options = get_cmd_options(av[1]);
+		char	*cmd = find_path(str, cmd_options[0]);
+		int exe_num = execve(cmd, cmd_options, envp);
+		if (exe_num == -1)
+			ft_printf("error : %s\n", strerror(errno));
+	}
+	else
+		ft_printf("ERROR : Not enough parameters !\n");
 	return (0);
 }
