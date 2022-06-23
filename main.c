@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/23 03:44:37 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/23 05:41:07 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,51 @@ char	*find_path(char **path_env, char *cmd)
 int	main(int ac, char *av[], char **envp)
 {
 
-	if (ac > 2)
+	if (ac == 5)
 	{
 		char	*path = get_paths(envp);
 		char	**str = arrage_paths(path);
-		char	**cmd_options = get_cmd_options(av[2]);
-		char	*cmd = find_path(str, cmd_options[0]);
-		int		fdf = open(av[1], O_RDONLY);
-		dup2(fdf, STDIN_FILENO);
-		int exe_num = execve(cmd, cmd_options, envp);
-		if (exe_num == -1)
-			ft_printf("error : %s\n", strerror(errno));
+		int		fd_infile = open(av[1], O_RDONLY);
+		int		fd_outfile = open(av[4], O_WRONLY | O_CREAT);
+		int		fd_pip[2];
+		int		status1;
+		int		status2;
+		pipe(fd_pip);
+		pid_t	pid1 = fork();
+		if (pid1 == 0)
+		{
+			close (fd_pip[0]);
+			char	**cmd_options1 = get_cmd_options(av[2]);
+			char	*cmd1 = find_path(str, cmd_options1[0]);
+			dup2(fd_infile, STDIN_FILENO);
+			dup2(fd_pip[1], STDOUT_FILENO);
+			execve(cmd1, cmd_options1, envp);
+		}
+		else
+		{
+			waitpid(pid1, &status1, WCONTINUED);
+			pid_t pid2 = fork();
+			if (pid2 == 0)
+			{
+				close (fd_pip[0]);
+				char	**cmd_options2 = get_cmd_options(av[3]);
+				char	*cmd2 = find_path(str, cmd_options2[0]);
+				dup2(fd_outfile, STDOUT_FILENO);
+				dup2(fd_pip[0], STDIN_FILENO);
+				execve(cmd2, cmd_options2, envp);
+			}
+			else
+			{
+				waitpid(pid2, &status2, WCONTINUED);
+				close(fd_pip[0]);
+				close(fd_pip[1]);
+				close(fd_infile);
+				close(fd_outfile);
+				exit(0);
+			}
+		}
 	}
 	else
-		ft_printf("ERROR : Not enough parameters !\n");
+		ft_printf("ERROR : Wrong parameters !\n");
 	return (0);
 }
