@@ -6,7 +6,7 @@
 #    By: yamrire <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/08 13:18:57 by yamrire           #+#    #+#              #
-#    Updated: 2022/06/23 01:36:02 by yamrire          ###   ########.fr        #
+#    Updated: 2022/06/23 02:06:23 by yamrire          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,13 +22,14 @@ all : $(NAME)
 $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) -c $(SRC)
 	ar rc $(BIBL) $(OBJ)
-	$(CC) $(BIBL) main.c -o $(NAME)
+	$(CC) $(CFLAGS) $(BIBL) main.c -o $(NAME)
 
 
 clean : 
 	rm -f $(OBJ)
+	rm -f $(BIBL)
 
 fclean : clean
 	rm -f $(NAME)
-
+	
 re : fclean all
