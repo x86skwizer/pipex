@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/23 05:41:07 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/24 21:16:32 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,23 +83,31 @@ char	*find_path(char **path_env, char *cmd)
 
 int	main(int ac, char *av[], char **envp)
 {
+	char	*path;
+	char	**str;
+	int		fd_infile;
+	int		fd_outfile;
+	int		fd_pip[2];
+	int		status1;
+	char	**cmd_options1;
+	char	*cmd1;
+	char	**cmd_options2;
+	char	*cmd2;
+
 
 	if (ac == 5)
 	{
-		char	*path = get_paths(envp);
-		char	**str = arrange_paths(path);
-		int		fd_infile = open(av[1], O_RDONLY);
-		int		fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
-		int		fd_pip[2];
-		int		status1;
-		// int		status2;
+		path = get_paths(envp);
+		str = arrange_paths(path);
+		fd_infile = open(av[1], O_RDONLY);
+		fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
 		pipe(fd_pip);
 		pid_t	pid1 = fork();
 		if (pid1 == 0)
 		{
 			close (fd_pip[0]);
-			char	**cmd_options1 = get_cmd_options(av[2]);
-			char	*cmd1 = find_path(str, cmd_options1[0]);
+			cmd_options1 = get_cmd_options(av[2]);
+			cmd1 = find_path(str, cmd_options1[0]);
 			dup2(fd_infile, STDIN_FILENO);
 			dup2(fd_pip[1], STDOUT_FILENO);
 			close(fd_pip[1]);
@@ -112,10 +120,9 @@ int	main(int ac, char *av[], char **envp)
 			if (pid2 == 0)
 			{
 				close (fd_pip[1]);
-				char	**cmd_options2 = get_cmd_options(av[3]);
-				char	*cmd2 = find_path(str, cmd_options2[0]);
-				int ret = dup2(fd_outfile, STDOUT_FILENO);
-				printf("ret = %d\n", ret);
+				cmd_options2 = get_cmd_options(av[3]);
+				cmd2 = find_path(str, cmd_options2[0]);
+				dup2(fd_outfile, STDOUT_FILENO);
 				dup2(fd_pip[0], STDIN_FILENO);
 				close(fd_pip[0]);
 				execve(cmd2, cmd_options2, envp);
@@ -125,11 +132,8 @@ int	main(int ac, char *av[], char **envp)
 			{
 				close(fd_pip[0]);
 				close(fd_pip[1]);
-				// waitpid(pid1, &status1, 0);
-				// waitpid(pid2, &status2, 0);
 				while (1) {
 					int ret = wait(&status1);
-					printf("ret = %d\n", ret);
 					if (ret == -1)
 						break;
 				}
