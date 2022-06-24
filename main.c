@@ -18,20 +18,12 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-/* Function that separate the cmd in args and its options */
-char	**get_cmd_options(char *argv)
+/* Function that returns every path possible */
+char	**arrange_paths(char **envp)
 {
-	char	**cmd_options;
-
-	cmd_options = ft_split(argv, ' ');
-	return (cmd_options);
-}
-
-/* Function that returns every path possible separated by ':' */
-char	*get_paths(char **envp)
-{
-	int		i;
 	char	*paths;
+	char	**path_split;
+	int		i;
 
 	i = 0;
 	while (envp[i])
@@ -44,35 +36,52 @@ char	*get_paths(char **envp)
 		}
 		i++;
 	}
-	return (paths);
+	path_split = ft_split(paths, ':');
+	i = 0;
+	while (path_split[i])
+	{
+		path_split[i] = ft_strjoin(path_split[i], "/");
+		i++;
+	}
+	return (path_split);
 }
 
 /* Function that split the paths possible and add '/' at the end of every path */
-char	**arrange_paths(char *paths)
-{
-	char	**path_env;
-	int		i;
+// char	**arrange_paths(char *paths)
+// {
+// 	char	**path_env;
+// 	int		i;
 
-	path_env = ft_split(paths, ':');
-	i = 0;
-	while (path_env[i])
-	{
-		path_env[i] = ft_strjoin(path_env[i], "/");
-		i++;
-	}
-	return (path_env);
+// 	path_env = ft_split(paths, ':');
+// 	i = 0;
+// 	while (path_env[i])
+// 	{
+// 		path_env[i] = ft_strjoin(path_env[i], "/");
+// 		i++;
+// 	}
+// 	return (path_env);
+// }
+
+/* Function that separate the cmd in args and its options */
+char	**get_cmd_options(char *argv)
+{
+	char	**cmd_options;
+
+	cmd_options = ft_split(argv, ' ');
+	return (cmd_options);
 }
 
 /* Function that find the right path for the cmd */
-char	*find_path(char **path_env, char *cmd)
+char	*find_path(char **paths, char *cmd_options)
 {
 	char	*path_cmd;
 	int		i;
+	
 
 	i = 0;
-	while (path_env[i])
+	while (paths[i])
 	{
-		path_cmd = ft_strjoin(path_env[i], cmd);
+		path_cmd = ft_strjoin(paths[i], cmd_options);
 		if (access(path_cmd, F_OK | X_OK) == 0)
 			return (path_cmd);
 		i++;
@@ -83,8 +92,8 @@ char	*find_path(char **path_env, char *cmd)
 
 int	main(int ac, char *av[], char **envp)
 {
-	char	*path;
-	char	**str;
+	//char	*paths;
+	char	**paths;
 	int		fd_infile;
 	int		fd_outfile;
 	int		fd_pip[2];
@@ -97,8 +106,8 @@ int	main(int ac, char *av[], char **envp)
 
 	if (ac == 5)
 	{
-		path = get_paths(envp);
-		str = arrange_paths(path);
+		//paths = get_paths(envp);
+		paths = arrange_paths(envp);
 		fd_infile = open(av[1], O_RDONLY);
 		fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
 		pipe(fd_pip);
@@ -107,7 +116,7 @@ int	main(int ac, char *av[], char **envp)
 		{
 			close (fd_pip[0]);
 			cmd_options1 = get_cmd_options(av[2]);
-			cmd1 = find_path(str, cmd_options1[0]);
+			cmd1 = find_path(paths, cmd_options1[0]);
 			dup2(fd_infile, STDIN_FILENO);
 			dup2(fd_pip[1], STDOUT_FILENO);
 			close(fd_pip[1]);
@@ -121,7 +130,7 @@ int	main(int ac, char *av[], char **envp)
 			{
 				close (fd_pip[1]);
 				cmd_options2 = get_cmd_options(av[3]);
-				cmd2 = find_path(str, cmd_options2[0]);
+				cmd2 = find_path(paths, cmd_options2[0]);
 				dup2(fd_outfile, STDOUT_FILENO);
 				dup2(fd_pip[0], STDIN_FILENO);
 				close(fd_pip[0]);
@@ -146,5 +155,7 @@ int	main(int ac, char *av[], char **envp)
 	}
 	else
 		ft_printf("ERROR : Wrong parameters !\n");
+
+		
 	return (0);
 }
