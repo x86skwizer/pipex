@@ -48,7 +48,7 @@ char	*get_paths(char **envp)
 }
 
 /* Function that split the paths possible and add '/' at the end of every path */
-char	**arrage_paths(char *paths)
+char	**arrange_paths(char *paths)
 {
 	char	**path_env;
 	int		i;
@@ -87,12 +87,12 @@ int	main(int ac, char *av[], char **envp)
 	if (ac == 5)
 	{
 		char	*path = get_paths(envp);
-		char	**str = arrage_paths(path);
+		char	**str = arrange_paths(path);
 		int		fd_infile = open(av[1], O_RDONLY);
-		int		fd_outfile = open(av[4], O_WRONLY | O_CREAT);
+		int		fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
 		int		fd_pip[2];
 		int		status1;
-		int		status2;
+		// int		status2;
 		pipe(fd_pip);
 		pid_t	pid1 = fork();
 		if (pid1 == 0)
@@ -102,26 +102,38 @@ int	main(int ac, char *av[], char **envp)
 			char	*cmd1 = find_path(str, cmd_options1[0]);
 			dup2(fd_infile, STDIN_FILENO);
 			dup2(fd_pip[1], STDOUT_FILENO);
+			close(fd_pip[1]);
 			execve(cmd1, cmd_options1, envp);
+			printf("execve failed 1");
 		}
 		else
 		{
-			waitpid(pid1, &status1, WCONTINUED);
 			pid_t pid2 = fork();
 			if (pid2 == 0)
 			{
-				close (fd_pip[0]);
+				close (fd_pip[1]);
 				char	**cmd_options2 = get_cmd_options(av[3]);
 				char	*cmd2 = find_path(str, cmd_options2[0]);
-				dup2(fd_outfile, STDOUT_FILENO);
+				int ret = dup2(fd_outfile, STDOUT_FILENO);
+				printf("ret = %d\n", ret);
 				dup2(fd_pip[0], STDIN_FILENO);
+				close(fd_pip[0]);
 				execve(cmd2, cmd_options2, envp);
+				printf("execve failed 2");
 			}
 			else
 			{
-				waitpid(pid2, &status2, WCONTINUED);
 				close(fd_pip[0]);
 				close(fd_pip[1]);
+				// waitpid(pid1, &status1, 0);
+				// waitpid(pid2, &status2, 0);
+				while (1) {
+					int ret = wait(&status1);
+					printf("ret = %d\n", ret);
+					if (ret == -1)
+						break;
+				}
+
 				close(fd_infile);
 				close(fd_outfile);
 				exit(0);
