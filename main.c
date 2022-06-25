@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/24 21:16:32 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/25 05:59:46 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <fcntl.h>
 #include "libft.h"
 #include "libftprintf.h"
+#include "pipex.h"
 
 char	**arrange_paths(char **envp)
 {
@@ -69,54 +70,50 @@ char	**get_cmd_options(char *argv, char **envp)
 
 int	main(int ac, char *av[], char **envp)
 {
-	int		fd_infile;
-	int		fd_outfile;
-	int		fd_pip[2];
+	Pipex	cmd;
 	pid_t	pid1;
 	pid_t	pid2;
-	char	**cmd_options1;
-	char	**cmd_options2;
 
 
 	if (ac == 5)
 	{
-		fd_infile = open(av[1], O_RDONLY);
-		fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
-		pipe(fd_pip);
+		cmd.fd_infile = open(av[1], O_RDONLY);
+		cmd.fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
+		pipe(cmd.fd_pip);
 		pid1 = fork();
 		if (pid1 == 0)
 		{
-			close (fd_pip[0]);
-			cmd_options1 = get_cmd_options(av[2], envp);
-			dup2(fd_infile, STDIN_FILENO);
-			dup2(fd_pip[1], STDOUT_FILENO);
-			close(fd_pip[1]);
-			execve(cmd_options1[0], cmd_options1, envp);
+			close (cmd.fd_pip[0]);
+			cmd.cmd_options = get_cmd_options(av[2], envp);
+			dup2(cmd.fd_infile, STDIN_FILENO);
+			dup2(cmd.fd_pip[1], STDOUT_FILENO);
+			close(cmd.fd_pip[1]);
+			execve(cmd.cmd_options[0], cmd.cmd_options, envp);
 		}
 		else
 		{
 			pid2 = fork();
 			if (pid2 == 0)
 			{
-				close (fd_pip[1]);
-				cmd_options2 = get_cmd_options(av[3], envp);
-				dup2(fd_outfile, STDOUT_FILENO);
-				dup2(fd_pip[0], STDIN_FILENO);
-				close(fd_pip[0]);
-				execve(cmd_options2[0], cmd_options2, envp);
+				close (cmd.fd_pip[1]);
+				cmd.cmd_options = get_cmd_options(av[3], envp);
+				dup2(cmd.fd_outfile, STDOUT_FILENO);
+				dup2(cmd.fd_pip[0], STDIN_FILENO);
+				close(cmd.fd_pip[0]);
+				execve(cmd.cmd_options[0], cmd.cmd_options, envp);
 			}
 			else
 			{
-				close(fd_pip[0]);
-				close(fd_pip[1]);
+				close(cmd.fd_pip[0]);
+				close(cmd.fd_pip[1]);
 				while (1) {
 					int ret = wait(0);
 					if (ret == -1)
 						break;
 				}
 
-				close(fd_infile);
-				close(fd_outfile);
+				close(cmd.fd_infile);
+				close(cmd.fd_outfile);
 				exit(0);
 			}
 		}
