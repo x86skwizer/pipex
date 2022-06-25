@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/25 06:04:37 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/25 06:06:57 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ int	main(int ac, char *av[], char **envp)
 			{
 				close(cmd.fd_pip[0]);
 				close(cmd.fd_pip[1]);
-				while (1) {
+				while (1) 
+				{
 					ret = wait(0);
 					if (ret == -1)
 						break;
