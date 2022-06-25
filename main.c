@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/25 05:59:46 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/25 06:04:37 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,11 @@ int	main(int ac, char *av[], char **envp)
 	Pipex	cmd;
 	pid_t	pid1;
 	pid_t	pid2;
-
+	int		ret;
 
 	if (ac == 5)
 	{
+		ret = 0;
 		cmd.fd_infile = open(av[1], O_RDONLY);
 		cmd.fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
 		pipe(cmd.fd_pip);
@@ -107,7 +108,7 @@ int	main(int ac, char *av[], char **envp)
 				close(cmd.fd_pip[0]);
 				close(cmd.fd_pip[1]);
 				while (1) {
-					int ret = wait(0);
+					ret = wait(0);
 					if (ret == -1)
 						break;
 				}
