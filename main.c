@@ -18,131 +18,99 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-/* Function that returns every path possible */
 char	**arrange_paths(char **envp)
 {
-	char	*paths;
-	char	**path_split;
+	char	*path_var;
+	char	**paths;
 	int		i;
 
 	i = 0;
 	while (envp[i])
 	{
-		paths = ft_strnstr(envp[i], "PATH=", 5);
-		if (paths)
+		path_var = ft_strnstr(envp[i], "PATH=", 5);
+		if (path_var)
 		{
-			paths = ft_substr(paths, 5, ft_strlen(paths) - 5);
+			path_var = ft_substr(path_var, 5, ft_strlen(path_var) - 5);
 			break;
 		}
 		i++;
 	}
-	path_split = ft_split(paths, ':');
-	i = 0;
-	while (path_split[i])
-	{
-		path_split[i] = ft_strjoin(path_split[i], "/");
-		i++;
-	}
-	return (path_split);
-}
-
-/* Function that split the paths possible and add '/' at the end of every path */
-// char	**arrange_paths(char *paths)
-// {
-// 	char	**path_env;
-// 	int		i;
-
-// 	path_env = ft_split(paths, ':');
-// 	i = 0;
-// 	while (path_env[i])
-// 	{
-// 		path_env[i] = ft_strjoin(path_env[i], "/");
-// 		i++;
-// 	}
-// 	return (path_env);
-// }
-
-/* Function that separate the cmd in args and its options */
-char	**get_cmd_options(char *argv)
-{
-	char	**cmd_options;
-
-	cmd_options = ft_split(argv, ' ');
-	return (cmd_options);
-}
-
-/* Function that find the right path for the cmd */
-char	*find_path(char **paths, char *cmd_options)
-{
-	char	*path_cmd;
-	int		i;
-	
-
+	paths = ft_split(path_var, ':');
 	i = 0;
 	while (paths[i])
 	{
-		path_cmd = ft_strjoin(paths[i], cmd_options);
-		if (access(path_cmd, F_OK | X_OK) == 0)
-			return (path_cmd);
+		paths[i] = ft_strjoin(paths[i], "/");
 		i++;
 	}
-	free(path_cmd);
-	return (0);
+	return (paths);
+}
+
+
+char	**get_cmd_options(char *argv, char **envp)
+{
+	char	**cmd_options;
+	char	*path_cmd;
+	char	**paths;
+	int		i;
+
+	paths = arrange_paths(envp);
+	cmd_options = ft_split(argv, ' ');
+	i = 0;
+	while (paths[i])
+	{
+		path_cmd = ft_strjoin(paths[i], cmd_options[0]);
+		if (access(path_cmd, F_OK | X_OK) == 0)
+			break;
+		i++;
+	}
+	cmd_options[0] = ft_strdup(path_cmd);
+	return (cmd_options);
 }
 
 int	main(int ac, char *av[], char **envp)
 {
-	//char	*paths;
-	char	**paths;
 	int		fd_infile;
 	int		fd_outfile;
 	int		fd_pip[2];
-	int		status1;
+	pid_t	pid1;
+	pid_t	pid2;
 	char	**cmd_options1;
-	char	*cmd1;
 	char	**cmd_options2;
-	char	*cmd2;
 
 
 	if (ac == 5)
 	{
-		//paths = get_paths(envp);
-		paths = arrange_paths(envp);
 		fd_infile = open(av[1], O_RDONLY);
 		fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
 		pipe(fd_pip);
-		pid_t	pid1 = fork();
+		pid1 = fork();
 		if (pid1 == 0)
 		{
 			close (fd_pip[0]);
-			cmd_options1 = get_cmd_options(av[2]);
-			cmd1 = find_path(paths, cmd_options1[0]);
+			cmd_options1 = get_cmd_options(av[2], envp);
 			dup2(fd_infile, STDIN_FILENO);
 			dup2(fd_pip[1], STDOUT_FILENO);
 			close(fd_pip[1]);
-			execve(cmd1, cmd_options1, envp);
-			printf("execve failed 1");
+			execve(cmd_options1[0], cmd_options1, envp);
 		}
 		else
 		{
-			pid_t pid2 = fork();
+			pid2 = fork();
 			if (pid2 == 0)
 			{
 				close (fd_pip[1]);
-				cmd_options2 = get_cmd_options(av[3]);
-				cmd2 = find_path(paths, cmd_options2[0]);
+				cmd_options2 = get_cmd_options(av[3], envp);
 				dup2(fd_outfile, STDOUT_FILENO);
 				dup2(fd_pip[0], STDIN_FILENO);
 				close(fd_pip[0]);
-				execve(cmd2, cmd_options2, envp);
-				printf("execve failed 2");
+				execve(cmd_options2[0], cmd_options2, envp);
 			}
 			else
 			{
 				close(fd_pip[0]);
 				close(fd_pip[1]);
 				while (1) {
-					int ret = wait(&status1);
+					int ret = wait(0);
 					if (ret == -1)
 						break;
 				}
