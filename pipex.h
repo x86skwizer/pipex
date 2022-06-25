@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 05:28:12 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/25 23:19:00 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/26 00:34:07 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include "libft.h"
 #include "ftprintf.h"
 
@@ -34,5 +35,6 @@ char	**get_cmd_options(char *argv, char **envp);
 void	in_process(Pipex cmd, char *av, char **envp);
 void	out_process(Pipex cmd, char *av, char **envp);
 void	parent_process(Pipex cmd);
+void	handle_error();
 
 #endif

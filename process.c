@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:10:02 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/26 00:02:20 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/26 00:45:21 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,44 @@
 
 void	in_process(Pipex cmd, char *av, char **envp)
 {
-	close (cmd.fd_pip[0]);
+	if (close (cmd.fd_pip[0]) == -1)
+		handle_error();
 	cmd.cmd_options = get_cmd_options(av, envp);
-	dup2(cmd.fd_infile, STDIN_FILENO);
-	dup2(cmd.fd_pip[1], STDOUT_FILENO);
-	close(cmd.fd_pip[1]);
-	execve(cmd.cmd_options[0], cmd.cmd_options, envp);
+	if (dup2(cmd.fd_infile, STDIN_FILENO) == -1)
+		handle_error();
+	if (dup2(cmd.fd_pip[1], STDOUT_FILENO)== -1)
+		handle_error();
+	if (close(cmd.fd_pip[1]) == -1)
+		handle_error();
+	if (execve(cmd.cmd_options[0], cmd.cmd_options, envp) == -1)
+		handle_error();
 }
 
 void	out_process(Pipex cmd, char *av, char **envp)
 {
-	close (cmd.fd_pip[1]);
+	if (close (cmd.fd_pip[1]) == -1)
+		handle_error();
 	cmd.cmd_options = get_cmd_options(av, envp);
-	dup2(cmd.fd_outfile, STDOUT_FILENO);
-	dup2(cmd.fd_pip[0], STDIN_FILENO);
-	close(cmd.fd_pip[0]);
-	execve(cmd.cmd_options[0], cmd.cmd_options, envp);
+	if (dup2(cmd.fd_outfile, STDOUT_FILENO) == -1)
+		handle_error();
+	if (dup2(cmd.fd_pip[0], STDIN_FILENO))
+		handle_error();
+	if (close(cmd.fd_pip[0]) == -1)
+		handle_error();
+	if (execve(cmd.cmd_options[0], cmd.cmd_options, envp) == -1)
+		handle_error();
 }
 
 void	parent_process(Pipex cmd)
 {
-	close(cmd.fd_pip[0]);
-	close(cmd.fd_pip[1]);
+	if (close(cmd.fd_pip[0]) == -1)
+		handle_error();
+	if (close(cmd.fd_pip[1]) == -1)
+		handle_error();
 	while (wait(0) == -1);
-	close(cmd.fd_infile);
-	close(cmd.fd_outfile);
+	if (close(cmd.fd_infile) == -1)
+		handle_error();
+	if (close(cmd.fd_outfile) == -1)
+		handle_error();
 	exit(0);
 }
