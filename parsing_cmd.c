@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:17:21 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/25 06:23:56 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/25 23:49:49 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,13 @@ char	**arrange_paths(char **envp)
 		i++;
 	}
 	paths = ft_split(path_var, ':');
+	free(path_var);
 	i = 0;
 	while (paths[i])
 	{
+		path_var = paths[i];
 		paths[i] = ft_strjoin(paths[i], "/");
+		free(path_var);
 		i++;
 	}
 	return (paths);
@@ -54,8 +57,15 @@ char	**get_cmd_options(char *argv, char **envp)
 		path_cmd = ft_strjoin(paths[i], cmd_options[0]);
 		if (access(path_cmd, F_OK | X_OK) == 0)
 			break;
+		free(path_cmd);
 		i++;
 	}
+	i = 0;
+	while(paths[i])
+		free(paths[i++]);
+	free(paths);
+	free(cmd_options[0]);
 	cmd_options[0] = ft_strdup(path_cmd);
+	free(path_cmd);
 	return (cmd_options);
 }
