@@ -1,36 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   ftprintf.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 23:46:41 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/25 06:20:05 by yamrire          ###   ########.fr       */
+/*   Created: 2022/01/08 14:03:27 by yamrire           #+#    #+#             */
+/*   Updated: 2022/06/25 06:21:11 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ftprintf.h"
+#ifndef FTPRINTF_H
+# define FTPRINTF_H
 
-int	ft_putstr(char *s)
-{
-	int	i;
-	int	len;
+# include <stdarg.h>
+# include <unistd.h>
 
-	i = 0;
-	len = 0;
-	if (s == NULL)
-	{
-		ft_putstr("(null)");
-		return (6);
-	}
-	if (s)
-	{
-		while (s[i] != '\0')
-		{
-			len += ft_putchar(s[i]);
-			i++;
-		}
-	}
-	return (len);
-}
+int	ft_putchar(char c);
+int	ft_putnbr(long n, int *len);
+int	ft_putstr(char *s);
+int	ft_printf(const char *str, ...);
+int	ft_nbr_base(unsigned long long n, int base, int which, int *len);
+
+#endif

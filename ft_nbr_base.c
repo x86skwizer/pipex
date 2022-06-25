@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_nbr_base.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <yamrire@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 18:25:16 by yamrire           #+#    #+#             */
-/*   Updated: 2022/01/15 21:40:50 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/25 06:20:27 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ftprintf.h"
 
 int	ft_nbr_base(unsigned long long n, int base, int which, int *len)
 {
