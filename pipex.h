@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 05:28:12 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/26 01:23:42 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/26 01:59:37 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ char	**get_cmd_options(char *argv, char **envp);
 void	in_process(t_Pipex cmd, char *av, char **envp);
 void	out_process(t_Pipex cmd, char *av, char **envp);
 void	parent_process(t_Pipex cmd);
-void	handle_error(void);
+void	handle_error(char *str);
 
 #endif
