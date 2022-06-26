@@ -6,13 +6,13 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:17:21 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/25 23:49:49 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/26 01:41:34 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**arrange_paths(char **envp)
+char	**get_paths(char **envp)
 {
 	char	*path_var;
 	char	**paths;
@@ -25,18 +25,28 @@ char	**arrange_paths(char **envp)
 		if (path_var)
 		{
 			path_var = ft_substr(path_var, 5, ft_strlen(path_var) - 5);
-			break;
+			break ;
 		}
 		i++;
 	}
 	paths = ft_split(path_var, ':');
 	free(path_var);
+	return (paths);
+}
+
+char	**arrange_paths(char **envp)
+{
+	char	**paths;
+	char	*tmp;
+	int		i;
+
+	paths = get_paths(envp);
 	i = 0;
 	while (paths[i])
 	{
-		path_var = paths[i];
+		tmp = paths[i];
 		paths[i] = ft_strjoin(paths[i], "/");
-		free(path_var);
+		free(tmp);
 		i++;
 	}
 	return (paths);
@@ -56,12 +66,12 @@ char	**get_cmd_options(char *argv, char **envp)
 	{
 		path_cmd = ft_strjoin(paths[i], cmd_options[0]);
 		if (access(path_cmd, F_OK | X_OK) == 0)
-			break;
+			break ;
 		free(path_cmd);
 		i++;
 	}
 	i = 0;
-	while(paths[i])
+	while (paths[i])
 		free(paths[i++]);
 	free(paths);
 	free(cmd_options[0]);
