@@ -6,13 +6,13 @@
 #    By: yamrire <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/08 13:18:57 by yamrire           #+#    #+#              #
-#    Updated: 2022/06/28 03:31:25 by yamrire          ###   ########.fr        #
+#    Updated: 2022/06/28 07:36:44 by yamrire          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = ft_nbr_base.c ft_printf.c ft_putchar.c ft_putnbr.c ft_putstr.c \
 ft_strlen.c ft_strnstr.c ft_substr.c ft_split.c ft_strjoin.c ft_strdup.c ft_strchr.c\
-process.c parsing_cmd.c
+process.c parsing_cmd.c main.c
 NAME = pipex
 BIBL = pipex.a
 CC = gcc
