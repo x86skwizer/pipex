@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:17:21 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 06:47:18 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 07:34:04 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ char	**get_paths(char **envp)
 	return (paths);
 }
 
-
 char	**arrange_paths(char **envp)
 {
 	char	**paths;
@@ -67,17 +66,11 @@ char	**arrange_paths(char **envp)
 	return (paths);
 }
 
-char	**get_cmd_options(char *argv, char **envp)
+char	**return_cmd_options(char **paths, char **cmd_options)
 {
-	char	**cmd_options;
 	char	*path_cmd;
-	char	**paths;
 	int		i;
 
-	paths = arrange_paths(envp);
-	cmd_options = ft_split(argv, ' ');
-	if (ft_strchr(cmd_options[0], '/'))
-		return (cmd_options);
 	i = 0;
 	while (paths[i])
 	{
@@ -96,4 +89,16 @@ char	**get_cmd_options(char *argv, char **envp)
 	paths = free_double(paths);
 	cmd_options = free_double(cmd_options);
 	return (NULL);
+}
+
+char	**get_cmd_options(char *argv, char **envp)
+{
+	char	**cmd_options;
+	char	**paths;
+
+	paths = arrange_paths(envp);
+	cmd_options = ft_split(argv, ' ');
+	if (ft_strchr(cmd_options[0], '/'))
+		return (cmd_options);
+	return (return_cmd_options(paths, cmd_options));
 }
