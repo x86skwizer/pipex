@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:10:02 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 03:41:54 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 06:36:01 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	in_process(t_Pipex cmd, char *av, char **envp)
 		if (execve(cmd.cmd_options[0], cmd.cmd_options, envp) == -1)
 			handle_error(errno);
 	}
+	waitpid(cmd.pid1, NULL, 0);
 }
 
 void	out_process(t_Pipex cmd, char *av, char **envp)
@@ -75,7 +76,6 @@ void	parent_process(t_Pipex cmd, int ret_filefd)
 	}
 	if (close(cmd.fd_outfile) == -1)
 		handle_error(errno);
-	waitpid(cmd.pid1, NULL, 0);
 	waitpid(cmd.pid2, NULL, 0);
 	exit(0);
 }
