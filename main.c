@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 03:43:48 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 06:32:41 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ int	main(int ac, char *av[], char **envp)
 	int		ret_filefd;
 
 	if (ac != 5)
+	{
 		ft_printf("ERROR : INCORRECT ARGUMENTS !\n");
+		return (0);
+	}
 	cmd.cmd_options = NULL;
 	ret_filefd = open_files(&cmd, av);
 	if (pipe(cmd.fd_pip))
