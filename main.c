@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 06:32:41 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 07:37:07 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	handle_error(int static_code)
 int	open_files(t_Pipex *cmd, char **av)
 {
 	cmd->fd_infile = open(av[1], O_RDONLY);
-	cmd->fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
+	cmd->fd_outfile = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (cmd->fd_infile == -1)
 	{
 		perror("pipex");
