@@ -3,54 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/26 02:00:51 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 00:58:09 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	handle_error(char *str)
+void	handle_error(int static_code)
 {
-	perror(str);
-	exit(errno);
+	perror("pipex");
+	exit(static_code);
 }
 
-void	open_files(t_Pipex *cmd, char **av)
+int	open_files(t_Pipex *cmd, char **av)
 {
 	cmd->fd_infile = open(av[1], O_RDONLY);
 	cmd->fd_outfile = open(av[4], O_WRONLY | O_CREAT, 0666);
-	if (cmd->fd_infile == -1)
-		handle_error(av[1]);
+	if (cmd->fd_infile == -1) {
+		perror("pipex");
+		return 1;	
+	}
 	if (cmd->fd_outfile == -1)
-		handle_error(av[4]);
+		handle_error(errno);
+	return 0;
 }
 
 int	main(int ac, char *av[], char **envp)
 {
 	t_Pipex	cmd;
-	pid_t	pid1;
-	pid_t	pid2;
 
 	if (ac != 5)
 		ft_printf("ERROR : INCORRECT ARGUMENTS !\n");
 	cmd.cmd_options = NULL;
-	open_files(&cmd, av);
+	int ret = open_files(&cmd, av);
+	
 	if (pipe(cmd.fd_pip))
-		handle_error("pipe()");
-	pid1 = fork();
-	if (pid1 == -1)
-		handle_error("fork()");
-	else if (pid1 == 0)
+		handle_error(errno);
+	// run first command
+	if (ret != 1) {
 		in_process(cmd, av[2], envp);
-	pid2 = fork();
-	if (pid2 == -1)
-		handle_error("fork()");
-	else if (pid2 == 0)
+	}
+	// run second command
+	cmd.pid2 = fork();
+	if (cmd.pid2 == -1)
+		handle_error(errno);
+	else if (cmd.pid2 == 0)
 		out_process(cmd, av[3], envp);
 	else
-		parent_process(cmd);
+		parent_process(cmd, ret);
 	return (0);
 }

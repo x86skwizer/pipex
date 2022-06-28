@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yamrire <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/08 13:18:57 by yamrire           #+#    #+#              #
-#    Updated: 2022/06/26 00:51:10 by yamrire          ###   ########.fr        #
+#    Updated: 2022/06/28 01:09:09 by yamrire          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = ft_nbr_base.c ft_printf.c ft_putchar.c ft_putnbr.c ft_putstr.c \
-ft_strlen.c ft_strnstr.c ft_substr.c ft_split.c ft_strjoin.c ft_strdup.c \
+ft_strlen.c ft_strnstr.c ft_substr.c ft_split.c ft_strjoin.c ft_strdup.c ft_strchr.c\
 process.c parsing_cmd.c
 NAME = pipex
 BIBL = pipex.a
