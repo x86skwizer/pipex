@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:17:21 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 00:38:26 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 03:51:52 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ char	**get_cmd_options(char *argv, char **envp)
 	while (paths[i])
 	{
 		path_cmd = ft_strjoin(paths[i], cmd_options[0]);
-		if (access(path_cmd, F_OK | X_OK) == 0) 
+		if (access(path_cmd, F_OK | X_OK) == 0)
 		{
-			i = 0;	
+			i = 0;
 			while (paths[i])
 				free(paths[i++]);
 			free(cmd_options[0]);

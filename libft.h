@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 17:14:38 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/23 03:47:28 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 03:29:33 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ size_t	ft_strlen(const char *str);
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *src);
+char	*ft_strchr(const char *str, int c);
 
 #endif

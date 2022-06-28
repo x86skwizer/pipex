@@ -3,29 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/27 23:07:51 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/27 23:08:30 by yamrire          ###   ########.fr       */
+/*   Created: 2021/12/05 00:07:30 by yamrire           #+#    #+#             */
+/*   Updated: 2022/06/28 03:32:14 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "libft.h"
 
-char	*ft_strchr(char *s, int c)
+char	*ft_strchr(const char *str, int c)
 {
-	int	i;
+	char	alpha;
+	int		num;
+	char	*s;
 
-	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i])
+	s = (char *)str;
+	alpha = (char) c;
+	num = 0;
+	while (s[num] != '\0')
 	{
-		if (s[i] == (char) c)
-			return ((char *) s + i);
-		i++;
+		if (s[num] == alpha)
+			return (&s[num]);
+		num++;
 	}
-	if ((char)c == '\0')
-		return ((char *) s + i);
+	if (c == '\0')
+		return (&s[num]);
 	return (NULL);
 }

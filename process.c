@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:10:02 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 01:25:02 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/28 03:41:54 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 void	in_process(t_Pipex cmd, char *av, char **envp)
 {
 	cmd.cmd_options = get_cmd_options(av, envp);
-	if (!cmd.cmd_options) {
+	if (!cmd.cmd_options)
+	{
 		ft_printf("pipex: command not found: %s\n", av);
-		return;
+		return ;
 	}
 	cmd.pid1 = fork();
 	if (cmd.pid1 == -1)
@@ -44,9 +45,10 @@ void	out_process(t_Pipex cmd, char *av, char **envp)
 	if (close (cmd.fd_pip[1]) == -1)
 		handle_error(errno);
 	cmd.cmd_options = get_cmd_options(av, envp);
-	if (!cmd.cmd_options) {
+	if (!cmd.cmd_options)
+	{
 		ft_printf("pipex: command not found: %s\n", av);
-		return;
+		return ;
 	}
 	if (dup2(cmd.fd_outfile, STDOUT_FILENO) == -1)
 		handle_error(errno);
@@ -60,13 +62,14 @@ void	out_process(t_Pipex cmd, char *av, char **envp)
 		handle_error(errno);
 }
 
-void	parent_process(t_Pipex cmd, int ret)
+void	parent_process(t_Pipex cmd, int ret_filefd)
 {
 	if (close(cmd.fd_pip[0]) == -1)
 		handle_error(errno);
 	if (close(cmd.fd_pip[1]) == -1)
 		handle_error(errno);
-	if (ret != 1) {
+	if (ret_filefd != 1)
+	{
 		if (close(cmd.fd_infile) == -1)
 			handle_error(errno);
 	}
@@ -74,8 +77,5 @@ void	parent_process(t_Pipex cmd, int ret)
 		handle_error(errno);
 	waitpid(cmd.pid1, NULL, 0);
 	waitpid(cmd.pid2, NULL, 0);
-	
-	// while (wait(0) == -1)
-	// 	;
 	exit(0);
 }
