@@ -3,42 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:10:02 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 06:36:01 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/29 04:28:57 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	in_process(t_Pipex cmd, char *av, char **envp)
+void	in_process(t_Pipex *cmd, char *av, char **envp)
 {
-	cmd.cmd_options = get_cmd_options(av, envp);
-	if (!cmd.cmd_options)
+	cmd->cmd_options = get_cmd_options(av, envp);
+	if (!cmd->cmd_options)
 	{
 		ft_printf("pipex: command not found: %s\n", av);
 		return ;
 	}
-	cmd.pid1 = fork();
-	if (cmd.pid1 == -1)
+	cmd->pid1 = fork();
+	if (cmd->pid1 == -1)
 		handle_error(errno);
-	else if (cmd.pid1 == 0)
+	else if (cmd->pid1 == 0)
 	{
-		if (close (cmd.fd_pip[0]) == -1)
+		if (close (cmd->fd_pip[0]) == -1)
 			handle_error(errno);
-		if (dup2(cmd.fd_infile, STDIN_FILENO) == -1)
+		if (dup2(cmd->fd_infile, STDIN_FILENO) == -1)
 			handle_error(errno);
-		if (dup2(cmd.fd_pip[1], STDOUT_FILENO) == -1)
+		if (dup2(cmd->fd_pip[1], STDOUT_FILENO) == -1)
 			handle_error(errno);
-		if (close(cmd.fd_pip[1]) == -1)
+		if (close(cmd->fd_pip[1]) == -1)
 			handle_error(errno);
-		if (close(cmd.fd_infile) == -1)
+		if (close(cmd->fd_infile) == -1)
 			handle_error(errno);
-		if (execve(cmd.cmd_options[0], cmd.cmd_options, envp) == -1)
+		if (execve(cmd->cmd_options[0], cmd->cmd_options, envp) == -1)
 			handle_error(errno);
 	}
-	waitpid(cmd.pid1, NULL, 0);
 }
 
 void	out_process(t_Pipex cmd, char *av, char **envp)
@@ -76,6 +75,7 @@ void	parent_process(t_Pipex cmd, int ret_filefd)
 	}
 	if (close(cmd.fd_outfile) == -1)
 		handle_error(errno);
+	waitpid(cmd.pid1, NULL, 0);
 	waitpid(cmd.pid2, NULL, 0);
 	exit(0);
 }

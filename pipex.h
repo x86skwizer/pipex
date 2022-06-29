@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 05:28:12 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 03:29:39 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/29 04:18:00 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_pipex
 
 char	**arrange_paths(char **envp);
 char	**get_cmd_options(char *argv, char **envp);
-void	in_process(t_Pipex cmd, char *av, char **envp);
+void	in_process(t_Pipex *cmd, char *av, char **envp);
 void	out_process(t_Pipex cmd, char *av, char **envp);
 void	parent_process(t_Pipex cmd, int ret);
 void	handle_error(int static_code);

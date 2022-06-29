@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 04:05:03 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 07:37:07 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/29 04:07:16 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(int ac, char *av[], char **envp)
 	if (pipe(cmd.fd_pip))
 		handle_error(errno);
 	if (ret_filefd != 1)
-		in_process(cmd, av[2], envp);
+		in_process(&cmd, av[2], envp);
 	cmd.pid2 = fork();
 	if (cmd.pid2 == -1)
 		handle_error(errno);

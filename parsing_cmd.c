@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:17:21 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 07:34:04 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/06/29 04:29:22 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	**free_double(char **pointer)
+void	free_double(char **pointer)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ char	**free_double(char **pointer)
 		i++;
 	}
 	free (pointer);
-	return (NULL);
+	pointer = NULL;
 }
 
 char	**get_paths(char **envp)
@@ -77,7 +77,7 @@ char	**return_cmd_options(char **paths, char **cmd_options)
 		path_cmd = ft_strjoin(paths[i], cmd_options[0]);
 		if (access(path_cmd, F_OK | X_OK) == 0)
 		{
-			paths = free_double(paths);
+			free_double(paths);
 			free(cmd_options[0]);
 			cmd_options[0] = ft_strdup(path_cmd);
 			free(path_cmd);
@@ -86,8 +86,8 @@ char	**return_cmd_options(char **paths, char **cmd_options)
 		free(path_cmd);
 		i++;
 	}
-	paths = free_double(paths);
-	cmd_options = free_double(cmd_options);
+	free_double(paths);
+	free_double(cmd_options);
 	return (NULL);
 }
 
