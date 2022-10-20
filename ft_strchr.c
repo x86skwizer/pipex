@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 00:07:30 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 03:32:14 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/10/20 18:58:17 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	*ft_strchr(const char *str, int c)
 
 	s = (char *)str;
 	alpha = (char) c;
+	if (!s)
+		return (NULL);
 	num = 0;
 	while (s[num] != '\0')
 	{
