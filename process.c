@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:10:02 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/29 06:01:38 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/10/20 19:02:32 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	in_process(t_Pipex *cmd, char *av, char **envp)
 	cmd->cmd_options = get_cmd_options(av, envp);
 	if (!cmd->cmd_options)
 	{
-		ft_printf("pipex: command not found: %s\n", av);
+		ft_printf("pipex: %s:command not found\n", av);
 		return ;
 	}
 	cmd->pid1 = fork();
@@ -47,7 +47,7 @@ void	out_process(t_Pipex cmd, char *av, char **envp)
 	cmd.cmd_options = get_cmd_options(av, envp);
 	if (!cmd.cmd_options)
 	{
-		ft_printf("pipex: command not found: %s\n", av);
+		ft_printf("pipex: %s:command not found\n", av);
 		return ;
 	}
 	if (dup2(cmd.fd_outfile, STDOUT_FILENO) == -1)
