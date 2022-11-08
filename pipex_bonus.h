@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 00:01:23 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/07 08:03:38 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/08 03:56:49 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include "libft.h"
 # include "ftprintf.h"
+#include "get_next_line.h"
 
 typedef struct s_pipex
 {
