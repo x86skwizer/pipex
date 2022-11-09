@@ -6,13 +6,13 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/27 23:39:11 by yamrire           #+#    #+#             */
-/*   Updated: 2022/02/27 23:42:34 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/09 03:29:21 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+size_t	my_strlen(const char *str)
 {
 	size_t	num;
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *str)
 	return (num);
 }
 
-char	*ft_strchr(char *str, int c)
+char	*my_strchr(char *str, int c)
 {
 	int		num;
 
@@ -34,13 +34,13 @@ char	*ft_strchr(char *str, int c)
 	return (NULL);
 }
 
-char	*ft_strdup(const char *src)
+char	*my_strdup(const char *src)
 {
 	char			*ptr;
 	unsigned int	num;
 
 	num = 0;
-	ptr = (char *) malloc((ft_strlen(src) + 1) * sizeof(char));
+	ptr = (char *) malloc((my_strlen(src) + 1) * sizeof(char));
 	if (!ptr)
 		return (NULL);
 	while (src[num] != '\0')
@@ -52,16 +52,16 @@ char	*ft_strdup(const char *src)
 	return (ptr);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*my_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*str;
 	size_t	num;
 
 	if (!s)
 		return (NULL);
-	if (len > ft_strlen(s))
+	if (len > my_strlen(s))
 	{
-		len = ft_strlen(s);
+		len = my_strlen(s);
 		str = (char *) malloc((len + 1) * sizeof(char));
 	}
 	else
@@ -69,7 +69,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (!str)
 		return (NULL);
 	num = 0;
-	while (num < len && start < ft_strlen(s))
+	while (num < len && start < my_strlen(s))
 	{
 		str[num] = s[start + num];
 		num++;
@@ -78,7 +78,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (str);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*my_strjoin(char const *s1, char const *s2)
 {
 	size_t	len1;
 	size_t	len;
@@ -88,11 +88,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
+	len = my_strlen(s1) + my_strlen(s2);
 	str = (char *) malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (NULL);
-	len1 = ft_strlen(s1);
+	len1 = my_strlen(s1);
 	count1 = 0;
 	while (count1 < len1)
 	{
