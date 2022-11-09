@@ -6,14 +6,14 @@
 #    By: yamrire <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/08 13:18:57 by yamrire           #+#    #+#              #
-#    Updated: 2022/11/07 07:58:56 by yamrire          ###   ########.fr        #
+#    Updated: 2022/11/09 09:02:31 by yamrire          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = ft_nbr_base.c ft_printf.c ft_putchar.c ft_putnbr.c ft_putstr.c \
 	ft_strlen.c ft_strnstr.c ft_substr.c ft_split.c ft_strjoin.c ft_strdup.c ft_strchr.c
 SRC_P = process.c parsing_cmd.c main.c
-SRC_B = main_bonus.c process_bonus.c parsing_cmd_bonus.c
+SRC_B = main_bonus.c process_bonus.c parsing_cmd_bonus.c get_next_line.c get_next_line_utils.c
 NAME = pipex
 BIBL = pipex.a
 BIBL_B = pipex_bonus.a
@@ -47,4 +47,4 @@ bonus : $(BIBL_B)
 $(BIBL_B) : $(OBJ) $(OBJ_B)
 	$(CC) $(CFLAGS) -c $(SRC) $(SRC_B)
 	ar rc $(BIBL_B) $(OBJ) $(OBJ_B)
-	$(CC) $(CFLAGS) $(BIBL_B) -o $(NAME)
+	$(CC) $(CFLAGS) $(BIBL_B) -o $(NAME) -g
