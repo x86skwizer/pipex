@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 00:00:56 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/09 09:10:08 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/09 11:41:12 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ void free_double(char **pointer)
 
 int	open_heredoc(pipex *cmd, char *av)
 {
-	cmd->fd_infile = open("./here_doc", O_APPEND | O_CREAT | O_TRUNC, 0644);
-	cmd->fd_outfile = open(av, O_APPEND | O_CREAT | O_TRUNC, 0644);
+	cmd->fd_infile = open("/tmp/.here_doc", O_APPEND | O_CREAT | O_RDWR | O_TRUNC, 0644);
+	cmd->fd_outfile = open(av, O_APPEND | O_CREAT | O_RDWR, 0644);
 	if (cmd->fd_infile == -1)
 	{
 		perror("pipex");
@@ -93,15 +93,25 @@ int main(int ac, char *av[], char **envp)
 		if (ac == 6 && cmpstr(av[1], "here_doc"))
 		{
 			ret_filefd = open_heredoc(&cmd, av[5]);
-			limiter = ft_strdup(av[2]);
-			here_doc = ft_strdup("null");
-			while (!(cmpstr(limiter, here_doc)) && !(cmpstr(ft_strjoin(limiter, "\n"), here_doc)))
+			limiter = ft_strjoin(av[2], "\n");
+			while (1)
 			{
-				free(here_doc);
 				ft_printf("pipex here_doc> ");
 				here_doc = get_next_line(0);
+				if (cmpstr(limiter, here_doc))
+				{
+					free(here_doc);
+					free(limiter);
+					break ;
+				}
 				write(cmd.fd_infile, here_doc, ft_strlen(here_doc));
+				//protection needed
+				free(here_doc);
 			}
+			close(cmd.fd_infile);
+			//protection needed
+			cmd.fd_infile = open("/tmp/.here_doc", O_RDONLY);
+			//protection needed
 			cmd.nbr_cmd = 2;
 			cmd.cmd = malloc(sizeof(char *) * (cmd.nbr_cmd + 1));
 			cmd.cmd[0] = ft_strdup(av[3]);
