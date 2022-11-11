@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 00:01:23 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/08 03:56:49 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/11 10:52:17 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include "libft.h"
-# include "ftprintf.h"
-#include "get_next_line.h"
+# include "ft_printf.h"
 
 typedef struct s_pipex
 {
@@ -32,15 +31,24 @@ typedef struct s_pipex
 	char	**cmd;
 	char	**paths;
 	int		fd_tmp;
-}	pipex;
+}	t_pipex;
 
-char **get_cmd_options(pipex *cmd, char *cmd_av);
-char **get_paths(char **envp);
-char **arrange_paths(char **envp);
-void in_process(pipex *cmd, char *cmd_av, pid_t *pid, char **envp);
-void mid_process(pipex *cmd, char *cmd_av, char **envp);
-void out_process(pipex *cmd, char *cmd_av, char **envp);
-void parent_process(pipex *cmd, int ret_filefd);
-void handle_error(int static_code);
+char	**get_cmd_options(t_pipex *cmd, char *cmd_av);
+char	**get_paths(char **envp);
+char	**arrange_paths(char **envp);
+void	in_process(t_pipex *cmd, char *cmd_av, pid_t *pid, char **envp);
+void	mid_process(t_pipex *cmd, char *cmd_av, char **envp);
+void	out_process(t_pipex *cmd, char *cmd_av, char **envp);
+void	parent_process(t_pipex *cmd, int ret_filefd);
+void	handle_error(int static_code);
+char	*get_next_line(int fd);
+void	free_double(char **pointer);
+int		open_heredoc(t_pipex *cmd, char *av);
+int		open_files(t_pipex *cmd, int ac, char **av);
+int		cmpstr(const char *s1, const char *s2);
+void	handle_error(int static_code);
+void	first_cluster(t_pipex *cmd, char **envp, int ret_filefd);
+void	middle_children(t_pipex *cmd, char **envp, int i);
+void	last_cluster(t_pipex *cmd, char **envp, int ret_filefd, int i);
 
 #endif

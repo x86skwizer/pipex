@@ -6,11 +6,11 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 23:46:41 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/25 06:20:05 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/11 09:46:30 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ftprintf.h"
+#include "ft_printf.h"
 
 int	ft_putstr(char *s)
 {

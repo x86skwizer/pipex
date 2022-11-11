@@ -6,17 +6,17 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 07:56:32 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/07 07:57:52 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/11 10:58:06 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-char **get_cmd_options(pipex *cmd, char *cmd_av)
+char	**get_cmd_options(t_pipex *cmd, char *cmd_av)
 {
-	char *path_cmd;
-	char **cmd_options;
-	int i;
+	char	*path_cmd;
+	char	**cmd_options;
+	int		i;
 
 	cmd_options = ft_split(cmd_av, ' ');
 	if (!(ft_strchr(cmd_options[0], '/')))
@@ -39,11 +39,11 @@ char **get_cmd_options(pipex *cmd, char *cmd_av)
 	return (cmd_options);
 }
 
-char **get_paths(char **envp)
+char	**get_paths(char **envp)
 {
-	char *path_var;
-	char **paths;
-	int i;
+	char	*path_var;
+	char	**paths;
+	int		i;
 
 	i = 0;
 	while (envp[i])
@@ -52,7 +52,7 @@ char **get_paths(char **envp)
 		if (path_var)
 		{
 			path_var = ft_substr(path_var, 5, ft_strlen(path_var) - 5);
-			break;
+			break ;
 		}
 		i++;
 	}
@@ -61,11 +61,11 @@ char **get_paths(char **envp)
 	return (paths);
 }
 
-char **arrange_paths(char **envp)
+char	**arrange_paths(char **envp)
 {
-	char **paths;
-	char *tmp;
-	int i;
+	char	**paths;
+	char	*tmp;
+	int		i;
 
 	paths = get_paths(envp);
 	i = 0;

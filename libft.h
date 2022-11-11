@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 17:14:38 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/28 03:29:33 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/11 09:43:32 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 50
+# endif
 
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char const *s1, char const *s2);

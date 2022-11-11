@@ -6,11 +6,11 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 11:26:43 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/09 03:25:09 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/11 09:39:56 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
 int	new_line_index(char *str)
 {
@@ -37,13 +37,13 @@ char	*analyse_line(char **stash)
 	index = new_line_index(*stash);
 	if ((*stash)[index] == '\n')
 	{
-		line = my_substr(*stash, 0, index + 1);
-		tmp = my_strdup((*stash) + (index + 1));
+		line = ft_substr(*stash, 0, index + 1);
+		tmp = ft_strdup((*stash) + (index + 1));
 		free(*stash);
 		*stash = tmp;
 		return (line);
 	}
-	line = my_strdup(*stash);
+	line = ft_strdup(*stash);
 	free(*stash);
 	*stash = NULL;
 	return (line);
@@ -55,10 +55,10 @@ void	form_line(int fd, char **stash, char *buff, ssize_t rd)
 
 	while (rd > 0)
 	{
-		tmp = my_strjoin(*stash, buff);
+		tmp = ft_strjoin(*stash, buff);
 		free(*stash);
 		*stash = tmp;
-		if (my_strchr(*stash, '\n') != NULL)
+		if (ft_strchr(*stash, '\n') != NULL)
 			break ;
 		rd = read(fd, buff, BUFFER_SIZE);
 		buff[rd] = '\0';
@@ -84,7 +84,7 @@ char	*get_next_line(int fd)
 	}
 	buff[rd] = '\0';
 	if (!stash)
-		stash = my_strdup("");
+		stash = ft_strdup("");
 	form_line(fd, &stash, buff, rd);
 	line = analyse_line(&stash);
 	return (line);
