@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 10:47:48 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/11 10:52:46 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/20 17:44:01 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,19 @@ void	middle_children(t_pipex *cmd, char **envp, int i)
 		handle_error(errno);
 	if (pipe(cmd->fd_pip))
 		handle_error(errno);
+	cmd->cmd_options = get_cmd_options(cmd, cmd->cmd[i]);
+	if (!cmd->cmd_options)
+	{
+		ft_printf("pipex: %s:command not found\n", cmd->cmd[i]);
+		return ;
+	}
 	cmd->pid[i] = fork();
 	if (cmd->pid[i] == -1)
 		handle_error(errno);
 	else if (cmd->pid[i] == 0)
-		mid_process(cmd, cmd->cmd[i], envp);
+		mid_process(cmd, envp);
+	else
+		free_double(cmd->cmd_options);
 }
 
 void	last_cluster(t_pipex *cmd, char **envp, int ret_filefd, int i)
@@ -52,11 +60,20 @@ void	last_cluster(t_pipex *cmd, char **envp, int ret_filefd, int i)
 		handle_error(errno);
 	if (close(cmd->fd_pip[1]) == -1)
 		handle_error(errno);
+	cmd->cmd_options = get_cmd_options(cmd, cmd->cmd[i]);
+	if (!cmd->cmd_options)
+	{
+		ft_printf("pipex: %s:command not found\n", cmd->cmd[i]);
+		return ;
+	}
 	cmd->pid[i] = fork();
 	if (cmd->pid[i] == -1)
 		handle_error(errno);
 	else if (cmd->pid[i] == 0)
-		out_process(cmd, cmd->cmd[i], envp);
+		out_process(cmd, envp);
 	else
+	{
+		free_double(cmd->cmd_options);
 		parent_process(cmd, ret_filefd);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 07:56:32 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/11 10:58:06 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/13 17:26:43 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ char	**get_cmd_options(t_pipex *cmd, char *cmd_av)
 			path_cmd = ft_strjoin(cmd->paths[i], cmd_options[0]);
 			if (access(path_cmd, F_OK | X_OK) == 0)
 			{
+				free(cmd_options[0]);
 				cmd_options[0] = ft_strdup(path_cmd);
 				free(path_cmd);
 				return (cmd_options);
