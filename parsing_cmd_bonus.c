@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 07:56:32 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/13 17:26:43 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/21 14:46:39 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	**get_cmd_options(t_pipex *cmd, char *cmd_av)
 	char	**cmd_options;
 	int		i;
 
+	if (!cmd->paths)
+		return (NULL);
 	cmd_options = ft_split(cmd_av, ' ');
 	if (!(ft_strchr(cmd_options[0], '/')))
 	{
@@ -35,9 +37,8 @@ char	**get_cmd_options(t_pipex *cmd, char *cmd_av)
 			free(path_cmd);
 			i++;
 		}
-		return (NULL);
 	}
-	return (cmd_options);
+	return (NULL);
 }
 
 char	**get_paths(char **envp)
@@ -57,6 +58,8 @@ char	**get_paths(char **envp)
 		}
 		i++;
 	}
+	if (!path_var)
+		return (NULL);
 	paths = ft_split(path_var, ':');
 	free(path_var);
 	return (paths);
@@ -69,6 +72,8 @@ char	**arrange_paths(char **envp)
 	int		i;
 
 	paths = get_paths(envp);
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{

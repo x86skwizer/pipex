@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 06:17:21 by yamrire           #+#    #+#             */
-/*   Updated: 2022/06/29 06:01:26 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/21 14:15:16 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ char	**get_paths(char **envp)
 		}
 		i++;
 	}
+	if (!path_var)
+		return (NULL);
 	paths = ft_split(path_var, ':');
 	free(path_var);
 	return (paths);
@@ -55,6 +57,8 @@ char	**arrange_paths(char **envp)
 	int		i;
 
 	paths = get_paths(envp);
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
@@ -71,6 +75,8 @@ char	**return_cmd_options(char **paths, char **cmd_options)
 	char	*path_cmd;
 	int		i;
 
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
@@ -97,6 +103,8 @@ char	**get_cmd_options(char *argv, char **envp)
 	char	**paths;
 
 	paths = arrange_paths(envp);
+	if (!paths)
+		return (NULL);
 	cmd_options = ft_split(argv, ' ');
 	if (ft_strchr(cmd_options[0], '/'))
 		return (cmd_options);
