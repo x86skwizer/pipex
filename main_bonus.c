@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yamrire <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 00:00:56 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/20 17:33:49 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/21 11:45:34 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	here_doc(t_pipex *cmd, char *av)
 	{
 		ft_printf("pipex here_doc> ");
 		here_doc = get_next_line(0);
+		if (here_doc == NULL)
+			break ;
 		if (cmpstr(limiter, here_doc))
 		{
 			free(here_doc);
