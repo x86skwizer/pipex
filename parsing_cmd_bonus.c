@@ -6,11 +6,25 @@
 /*   By: yamrire <yamrire@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 07:56:32 by yamrire           #+#    #+#             */
-/*   Updated: 2022/11/21 14:46:39 by yamrire          ###   ########.fr       */
+/*   Updated: 2022/11/22 00:42:57 by yamrire          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+char	**free_cmd(char **pointer)
+{
+	int	i;
+
+	i = 0;
+	while (pointer[i])
+	{
+		free(pointer[i]);
+		i++;
+	}
+	free(pointer);
+	return (NULL);
+}
 
 char	**get_cmd_options(t_pipex *cmd, char *cmd_av)
 {
@@ -38,7 +52,7 @@ char	**get_cmd_options(t_pipex *cmd, char *cmd_av)
 			i++;
 		}
 	}
-	return (NULL);
+	return (free_cmd(cmd_options));
 }
 
 char	**get_paths(char **envp)
